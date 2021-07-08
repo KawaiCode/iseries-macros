@@ -1,0 +1,15 @@
+[PCOMM SCRIPT HEADER]
+LANGUAGE=VBSCRIPT
+DESCRIPTION="send key strokes to terminal"
+[PCOMM SCRIPT SOURCE]
+OPTION EXPLICIT
+autECLSession.SetConnectionByName(ThisSessionName)
+
+
+sub SendKeys()
+    'send text 'Jamie' to the current cursor position and then press enter
+    autECLSession.autECLPS.SendKeys "Jamie"
+    autECLSession.autECLPS.SendKeys "[enter]"
+end sub
+
+SendKeys

@@ -1,0 +1,12 @@
+[PCOMM SCRIPT HEADER]
+LANGUAGE=VBSCRIPT
+DESCRIPTION="the very first script"
+[PCOMM SCRIPT SOURCE]
+OPTION EXPLICIT
+autECLSession.SetConnectionByName(ThisSessionName)
+
+sub FirstScript()
+    MsgBox "Hello World" 
+end sub
+
+FirstScript

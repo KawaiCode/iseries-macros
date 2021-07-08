@@ -1,0 +1,19 @@
+[PCOMM SCRIPT HEADER]
+LANGUAGE=VBSCRIPT
+DESCRIPTION="read text from screen"
+[PCOMM SCRIPT SOURCE]
+OPTION EXPLICIT
+autECLSession.SetConnectionByName(ThisSessionName)
+
+sub readScreen()
+    dim text
+
+    'always refresh presentation space before reading from screen
+    autECLSession.autECLPS.autECLFieldList.Refresh
+    'read text from field in position 1,10
+    text = trim(autECLSession.autECLPS.autECLFieldList.FindFieldByRowCol(1, 10).GetText)
+
+    msgbox(text)
+end sub
+
+readScreen

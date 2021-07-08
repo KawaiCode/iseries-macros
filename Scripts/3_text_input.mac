@@ -1,0 +1,15 @@
+[PCOMM SCRIPT HEADER]
+LANGUAGE=VBSCRIPT
+DESCRIPTION="input text to field"
+[PCOMM SCRIPT SOURCE]
+OPTION EXPLICIT
+autECLSession.SetConnectionByName(ThisSessionName)
+
+sub inputText()
+    'always refresh presentation space before reading/setting text
+    autECLSession.autECLPS.autECLFieldList.Refresh
+    'set text of field at position 5,25 to Jamie
+    autECLSession.autECLPS.autECLFieldList.FindFieldByRowCol(5, 25).SetText "Jamie"
+end sub
+
+inputText

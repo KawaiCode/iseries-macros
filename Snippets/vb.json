@@ -1,0 +1,77 @@
+{
+  "get cursor position": {
+    "prefix": "asgetcursor",
+    "body": [
+      "${1:rowvar} = autECLSession.autECLPS.CursorPosRow",
+      "${2:colvar} = autECLSession.autECLPS.CursorPosCol",
+      "$0"
+    ]
+  },
+
+  "get text value": {
+    "prefix": "asgettext",
+    "body": [
+      "autECLSession.autECLPS.autECLFieldList.FindFieldByRowCol(${1:row}, ${2:column}).GetText",
+      "$0"
+    ]
+  },
+
+  "refresh screen": {
+    "prefix": "asrefresh",
+    "body": ["autECLSession.autECLPS.autECLFieldList.Refresh", "$0"]
+  },
+
+  "send key": {
+    "prefix": "assendkey",
+    "body": ["autECLSession.autECLPS.SendKeys ${1:key}", "$0"]
+  },
+
+  "set cursor position": {
+    "prefix": "assetcursor",
+    "body": ["autECLSession.autECLPS.SetCursorPos ${1:row}, ${2:col}", "$0"]
+  },
+
+  "set text": {
+    "prefix": "assettext",
+    "body": [
+      "autECLSession.autECLPS.autECLFieldList.FindFieldByRowCol(${1:row}, ${2:column}).SetText ${3:text}",
+      "$0"
+    ]
+  },
+
+  "wait for cursor": {
+    "prefix": "aswaitcursor",
+    "body": [
+      "if not (autECLSession.autECLPS.WaitForCursor(${1:row},${2:col},${3:mswait})) Then",
+      "\tMsgBox ${4:errormsg}",
+      "\texit sub",
+      "end if",
+      "$0"
+    ]
+  },
+
+  "wait for input": {
+    "prefix": "aswaitinput",
+    "body": [
+      "autECLSession.autECLOIA.WaitForAppAvailable",
+      "autECLSession.autECLOIA.WaitForInputReady",
+      "$0"
+    ]
+  },
+
+  "wait while cursor": {
+    "prefix": "aswaitwhilecursor",
+    "body": [
+      "if not (autECLSession.autECLPS.WaitWhileCursor(${1:row},${2:col},${3:mswait})) Then",
+      "\tMsgBox ${4:errormsg}",
+      "\texit sub",
+      "end if",
+      "$0"
+    ]
+  },
+
+  "wait X miliseconds": {
+    "prefix": "aswaitx",
+    "body": ["autECLSession.autECLPS.Wait ${1:mswait}", "$0"]
+  }
+}

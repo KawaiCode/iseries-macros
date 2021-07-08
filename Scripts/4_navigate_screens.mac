@@ -1,0 +1,28 @@
+[PCOMM SCRIPT HEADER]
+LANGUAGE=VBSCRIPT
+DESCRIPTION="navigate between screens"
+[PCOMM SCRIPT SOURCE]
+OPTION EXPLICIT
+autECLSession.SetConnectionByName(ThisSessionName)
+
+sub navigateScreens()
+    'refresh presentation space and set text field at position 5,25 to Jamie
+    autECLSession.autECLPS.autECLFieldList.Refresh
+    autECLSession.autECLPS.autECLFieldList.FindFieldByRowCol(5, 25).SetText "Jamie"
+
+    'make sure the terminal is ready to accept enter
+    autECLSession.autECLOIA.WaitForAppAvailable
+    autECLSession.autECLOIA.WaitForInputReady
+
+    'press enter
+    autECLSession.autECLPS.SendKeys "[enter]"
+
+    'check if cursor reached position 20,7
+    'if this doesn't happen within 10 seconds show error and stop execution
+    if not (autECLSession.autECLPS.WaitForCursor(20,7,10000)) Then
+        MsgBox "Could not navigate to another screen"
+        exit sub
+    end if
+end sub
+
+navigateScreens

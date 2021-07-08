@@ -1,0 +1,61 @@
+[PCOMM SCRIPT HEADER]
+LANGUAGE=VBSCRIPT
+DESCRIPTION="integrate terminal and excel to input data"
+[PCOMM SCRIPT SOURCE]
+OPTION EXPLICIT
+autECLSession.SetConnectionByName(ThisSessionName)
+
+sub excel_example()
+    dim oExcel
+    dim ThisWorkbook
+    dim shData
+    dim lastRow
+    dim i
+    dim messageID
+
+    'define excel object
+    Set oExcel = GetObject(, "Excel.Application")
+    If TypeName(oExcel) = "Empty" then
+        Msgbox "Excel is not running."
+        Exit sub
+    end if
+    'get reference to workbook named "input info.xlsx" and sheet named "Sheet1" 
+    Set ThisWorkbook = oExcel.Workbooks("input info.xlsx")
+    Set shData = ThisWorkbook.WorkSheets("Sheet1")
+    'get last row of data; number -4162 is an Excel constant xlUp
+    lastRow = shData.Range("A" & shData.Rows.Count).End(-4162).Row
+
+    'loop through all rows of data in Excel
+    'input each value to the terminal and confirm changes
+    'update Excel to show changes
+    if lastRow > 1 then
+        for i=2 to lastRow 
+            messageID = shData.Range("A" & i).Value
+                
+            autECLSession.autECLOIA.WaitForAppAvailable
+            autECLSession.autECLOIA.WaitForInputReady
+            autECLSession.autECLPS.autECLFieldList.Refresh
+
+            autECLSession.autECLPS.autECLFieldList.FindFieldByRowCol(14, 3).SetText "1"
+            autECLSession.autECLPS.autECLFieldList.FindFieldByRowCol(14, 11).SetText messageID
+
+            autECLSession.autECLOIA.WaitForAppAvailable
+            autECLSession.autECLOIA.WaitForInputReady
+            autECLSession.autECLPS.SendKeys "[enter]"
+                
+            if not (autECLSession.autECLPS.WaitForCursor(5,50,10000)) Then
+                MsgBox "Failed to add message: " & messageID
+                exit sub
+            end if
+
+            autECLSession.autECLOIA.WaitForAppAvailable
+            autECLSession.autECLOIA.WaitForInputReady
+            autECLSession.autECLPS.SendKeys "[enter]"
+            shData.Range("B" & i).Value = "OK"
+        next
+    end if
+
+    MsgBox "Mission accomplished"
+end sub
+
+excel_example
